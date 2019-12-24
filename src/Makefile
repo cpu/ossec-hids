@@ -29,7 +29,7 @@ USE_PRELUDE?=no
 USE_ZEROMQ?=no
 USE_GEOIP?=no
 USE_INOTIFY=no
-USE_PCRE2_JIT=yes
+USE_PCRE2_JIT=no
 
 ifneq (${TARGET},winagent)
 	USE_OPENSSL?=auto
@@ -135,14 +135,14 @@ ifneq (${uname_S},OpenBSD)
 endif
 
 ifdef DEBUGAD
-	DEFINES+=+DDEBUGAD
+	DEFINES+=-DDEBUGAD
 endif
 
 OSSEC_CFLAGS=${CFLAGS}
 #ANALYSISD_FLAGS="-lsqlite3"
 
 ifdef DEBUG
-	OSSEC_CFLAGS+=-g
+	OSSEC_CFLAGS+=-g -O0
 endif #DEBUG
 
 ifneq (,$(filter ${CLEANFULL},yes y Y 1))
