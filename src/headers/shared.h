@@ -12,6 +12,12 @@
  *  Reference: http://gcc.gnu.org/onlinedocs/gcc-4.1.2/cpp.pdf
  */
 
+#if defined(__clang__) || defined (__GNUC__)
+# define ATTRIBUTE_NO_SANITIZE_ADDRESS __attribute__((no_sanitize_address))
+#else
+# define ATTRIBUTE_NO_SANITIZE_ADDRESS
+#endif
+
 #if defined(__GNUC__) && (((__GNUC__ == 4) && (__GNUC_MINOR__ >= 1) && (__GNUC_PATCHLEVEL__ >= 2)) || \
                           ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 2)) || \
                            (__GNUC__ >= 5))
