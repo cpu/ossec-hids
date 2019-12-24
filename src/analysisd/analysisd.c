@@ -681,13 +681,7 @@ void OS_ReadMSG_analysisd(int m_queue)
     }
 
     /* Daemon loop */
-    //while (1) {
-    while (__AFL_LOOP(1000)) {
-        // clear the msg buffer
-        memset(msg, '\0', OS_MAXSTR + 1);
-        i = read(STDIN_FILENO, msg, OS_MAXSTR);
-        msg[OS_MAXSTR] = '\0';
-
+    while (1) {
         lf = (Eventinfo *)calloc(1, sizeof(Eventinfo));
         os_calloc(Config.decoder_order_size, sizeof(char*), lf->fields);
 
@@ -699,10 +693,8 @@ void OS_ReadMSG_analysisd(int m_queue)
         DEBUG_MSG("%s: DEBUG: Waiting for msgs on stdin - %d ", ARGV0, (int)time(0));
 
         /* Receive message from queue */
-        //if ((i = OS_RecvUnix(m_queue, OS_MAXSTR, msg))) {
-        // TODO(@cpu): add define to control where input is read from.
-        if (i > 0) {
-            printf("%s: DEBUG: Read %d bytes from stdin - %d\n", ARGV0, i, (int)time(0));
+        if ((i = OS_RecvUnix(m_queue, OS_MAXSTR, msg))) {
+            printf("%s: DEBUG: Read %d bytes from queue - %d\n", ARGV0, i, (int)time(0));
             RuleNode *rulenode_pt;
 
             /* Get the time we received the event */
@@ -1060,7 +1052,6 @@ CLMEM:
             free(lf);
         }
     }
-    exit(0);
 }
 
 /* Checks if the current_rule matches the event information */
