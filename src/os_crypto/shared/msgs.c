@@ -126,7 +126,10 @@ void OS_StartCounter(keystore *keys)
     }
 
 
-    _s_verify_counter = getDefine_Int("remoted", "verify_msg_id" , 0, 1);
+    //_s_verify_counter = getDefine_Int("remoted", "verify_msg_id" , 0, 1);
+    // TODO(@cpu): Probably should just change the defined verify_msg_id in
+    // config...
+    _s_verify_counter = 0;
 }
 
 /* Remove the ID counter */
@@ -170,9 +173,12 @@ static char *CheckSum(char *msg)
     msg += 32;
 
     OS_MD5_Str(msg, checksum);
+    // TODO(@cpu): Add a define to enable/disable checking the MD5
+    /*
     if (strncmp(checksum, recvd_sum, 32) != 0) {
         return (NULL);
     }
+    */
 
     return (msg);
 }
@@ -191,15 +197,21 @@ char *ReadSecMSG(keystore *keys, char *buffer, char *cleartext,
         return (NULL);
     }
 
+    // TODO(@cpu): Add a define to enable/disable decryption.
+    memcpy(cleartext, buffer, buffer_size);
+
     /* Decrypt message */
+    /*
     if (!OS_BF_Str(buffer, cleartext, keys->keyentries[id]->key,
                    buffer_size, OS_DECRYPT)) {
         merror(ENCKEY_ERROR, __local_name, keys->keyentries[id]->ip->ip);
         return (NULL);
     }
+    */
 
     /* Compressed */
-    else if (cleartext[0] == '!') {
+    //else if (cleartext[0] == '!') {
+    if (cleartext[0] == '!') {
         cleartext[buffer_size] = '\0';
         cleartext++;
         buffer_size--;
@@ -211,12 +223,14 @@ char *ReadSecMSG(keystore *keys, char *buffer, char *cleartext,
         }
 
         /* Uncompress */
+        // TODO(@cpu): add define to enable/disable zlib compression
         if (!os_zlib_uncompress(cleartext, buffer, buffer_size, OS_MAXSTR)) {
             merror(UNCOMPRESS_ERR, __local_name);
             return (NULL);
         }
 
         /* Check checksum */
+        // TODO(@cpu): add define to enable/disable checksum
         f_msg = CheckSum(buffer);
         if (f_msg == NULL) {
             merror(ENCSUM_ERROR, __local_name, keys->keyentries[id]->ip->ip);
