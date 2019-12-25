@@ -104,11 +104,15 @@ static void help_analysisd(void)
     exit(1);
 }
 
-#ifndef TESTRULE
-int main(int argc, char **argv)
+#ifdef HFND_FUZZING_ENTRY_FUNCTION
+HFND_FUZZING_ENTRY_FUNCTION(int argc, char **argv)
 #else
+#ifdef TESTRULE
 __attribute__((noreturn))
 int main_analysisd(int argc, char **argv)
+#else
+int main(int argc, char **argv)
+#endif
 #endif
 {
     int c = 0, m_queue = 0, test_config = 0, run_foreground = 0;

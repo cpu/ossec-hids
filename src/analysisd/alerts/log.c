@@ -65,6 +65,7 @@ void OS_Store(const Eventinfo *lf)
         return;
     }
 
+    /*
     fprintf(_eflog,
             "%d %s %02d %s %s%s%s %s\n",
             lf->year,
@@ -75,6 +76,7 @@ void OS_Store(const Eventinfo *lf)
             lf->hostname != lf->location ? "->" : "",
             lf->location,
             lf->full_log);
+    */
 
     fflush(_eflog);
     return;
@@ -93,6 +95,7 @@ void OS_LogOutput(Eventinfo *lf)
     }
 #endif
 
+    /*
     printf(
         "** Alert %ld.%ld:%s - %s\n"
         "%d %s %02d %s %s%s%s\nRule: %d (level %d) -> '%s'"
@@ -148,18 +151,19 @@ void OS_LogOutput(Eventinfo *lf)
         lf->dstuser == NULL ? "" : lf->dstuser,
 
         lf->full_log);
+    */
 
     /* Print the last events if present */
     if (lf->generated_rule->last_events) {
         char **lasts = lf->generated_rule->last_events;
         while (*lasts) {
-            printf("%.1256s\n", *lasts);
+            //printf("%.1256s\n", *lasts);
             lasts++;
         }
         lf->generated_rule->last_events[0] = NULL;
     }
 
-    printf("\n");
+    //printf("\n");
 
     fflush(stdout);
     return;
@@ -179,6 +183,7 @@ void OS_Log(Eventinfo *lf)
 #endif
 
     /* Writing to the alert log file */
+    /*
     fprintf(_aflog,
             "** Alert %ld.%ld:%s - %s\n"
             "%d %s %02d %s %s%s%s\nRule: %d (level %d) -> '%s'"
@@ -233,18 +238,19 @@ void OS_Log(Eventinfo *lf)
             lf->dstuser == NULL ? "" : lf->dstuser,
 
             lf->full_log);
+    */
 
     /* Print the last events if present */
     if (lf->generated_rule->last_events) {
         char **lasts = lf->generated_rule->last_events;
         while (*lasts) {
-            fprintf(_aflog, "%.1256s\n", *lasts);
+            //fprintf(_aflog, "%.1256s\n", *lasts);
             lasts++;
         }
         lf->generated_rule->last_events[0] = NULL;
     }
 
-    fprintf(_aflog, "\n");
+    //fprintf(_aflog, "\n");
     fflush(_aflog);
 
     return;
@@ -349,8 +355,8 @@ void OS_CustomLog(const Eventinfo *lf, const char *format)
         tmp_log = NULL;
     }
 
-    fprintf(_aflog, "%s", log);
-    fprintf(_aflog, "\n");
+    //fprintf(_aflog, "%s", log);
+    //fprintf(_aflog, "\n");
     fflush(_aflog);
 
     if (log) {
@@ -437,6 +443,7 @@ int FW_Log(Eventinfo *lf)
     }
 
     /* Log to file */
+    /*
     fprintf(_fflog,
             "%d %s %02d %s %s%s%s %s %s %s:%s->%s:%s\n",
             lf->year,
@@ -452,6 +459,7 @@ int FW_Log(Eventinfo *lf)
             lf->srcport,
             lf->dstip,
             lf->dstport);
+    */
 
     fflush(_fflog);
 
