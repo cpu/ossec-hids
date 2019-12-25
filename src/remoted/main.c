@@ -34,7 +34,11 @@ static void help_remoted()
     exit(1);
 }
 
+#ifdef HFND_FUZZING_ENTRY_FUNCTION
+HFND_FUZZING_ENTRY_FUNCTION(int argc, char **argv)
+#else
 int main(int argc, char **argv)
+#endif
 {
     int i = 0, c = 0;
     uid_t uid;
@@ -152,9 +156,11 @@ int main(int argc, char **argv)
     }
 
     /* Set new group */
+    /*
     if (Privsep_SetGroup(gid) < 0) {
         ErrorExit(SETGID_ERROR, ARGV0, group, errno, strerror(errno));
     }
+    */
 
     /* chroot */
     if (Privsep_Chroot(dir) < 0) {
@@ -174,14 +180,14 @@ int main(int argc, char **argv)
     i = 0;
     while (logr.conn[i] != 0) {
         /* Fork for each connection handler */
-        if (fork() == 0) {
+        //if (fork() == 0) {
             /* On the child */
             debug1("%s: DEBUG: Forking remoted: '%d'.", ARGV0, i);
             HandleRemote(i, uid);
-        } else {
-            i++;
-            continue;
-        }
+        //} else {
+        //    i++;
+        //    continue;
+        //}
     }
 
     return (0);

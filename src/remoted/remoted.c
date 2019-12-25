@@ -56,9 +56,11 @@ void HandleRemote(int position, int uid)
     }
 
     /* Revoke privileges */
+    /*
     if (Privsep_SetUser(uid) < 0) {
         ErrorExit(SETUID_ERROR, ARGV0, REMUSER, errno, strerror(errno));
     }
+    */
 
     /* Create PID */
     if (CreatePID(ARGV0, getpid()) < 0) {
